@@ -175,9 +175,9 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
 </div>
 
 <!-- Enlace de música romántica tipo piano/acústica romántica -->
+<!-- Audio romántico optimizado en MP3 -->
 <audio id="audio" loop preload="auto">
-  <source src="https://actions.google.com/sounds/v1/ambiences/romantic_music.ogg" type="audio/ogg">
-  <source src="https://cdn.jsdelivr.net/gh/anars/blank-audio@master/250-milliseconds-of-silence.mp3" type="audio/mpeg">
+  <source src="https://ia801503.us.archive.org/15/items/EdSheeranPerfect_201801/Ed%20Sheeran%20-%20Perfect.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -286,16 +286,22 @@ function iniciar(){
   const w = document.getElementById('welcome');
   w.style.opacity = '0';
 
-  audio.volume = 0.4;
-  audio.play().then(()=>{
+  // Asegurar referencia al audio
+  const audio = document.getElementById('audio');
+  audio.volume = 0.5;
+  audio.play().then(() => {
     sonando = true;
     document.getElementById('musica').textContent = '🎵';
-  }).catch(()=>{ document.getElementById('musica').textContent = '🔇'; });
+  }).catch((err) => {
+    console.log("Error al reproducir audio:", err);
+    document.getElementById('musica').textContent = '🔇';
+  });
 
   document.getElementById('musica').style.display = 'flex';
 
   setTimeout(() => { w.style.display = 'none'; animarArbol(); }, 1300);
 }
+   
 
 /* =======================================================
    ANIMACIÓN: ÁRBOL CON CORAZÓN PERFECTAMENTE PROPORCIONADO
