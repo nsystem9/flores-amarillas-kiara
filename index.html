@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para el amor de mi vida, Kiara 💛</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* =======================================================
+   ÁRBOL DE CORAZÓN — DÍA DE LAS FLORES AMARILLAS
+   Todo lo que quieras personalizar está en el bloque
+   "CONFIG" del JavaScript, más abajo. No necesitas tocar
+   nada más.
+   ======================================================= */
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --dorado:#ffd54a;
+  --dorado-claro:#ffe98a;
+  --ambar:#ff9d2e;
+}
+
+html,body{height:100%}
+
+body{
+  background:#04040a;
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% 105%, rgba(255,160,40,.16) 0%, rgba(4,4,10,0) 60%),
+    radial-gradient(ellipse 90% 70% at 50% 35%, rgba(90,70,160,.15) 0%, rgba(4,4,10,0) 70%);
+  font-family:'Montserrat',-apple-system,'Segoe UI',sans-serif;
+  overflow:hidden;
+  color:#fff;
+  position:relative;
+}
+
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+
+/* ---------- Pantalla de bienvenida ---------- */
+#welcome{
+  position:fixed;inset:0;z-index:40;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:0 26px;
+  background:#04040a;
+  background-image:radial-gradient(ellipse at 50% 50%, rgba(255,180,60,.13) 0%, rgba(4,4,10,1) 70%);
+  transition:opacity 1.4s ease;
+}
+#welcome .sello{
+  font-size:2.6rem;margin-bottom:18px;
+  filter:drop-shadow(0 0 18px rgba(255,200,60,.65));
+  animation:latir 2.4s ease-in-out infinite;
+}
+@keyframes latir{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+#welcome h1{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(2rem,7vw,3rem);font-weight:600;line-height:1.15;
+  color:var(--dorado-claro);
+  text-shadow:0 0 30px rgba(255,200,60,.45);
+  margin-bottom:14px;
+}
+#welcome p{
+  font-size:.98rem;font-weight:300;color:#b9b6c6;
+  max-width:420px;margin-bottom:36px;line-height:1.6;
+}
+#welcome button{
+  background:linear-gradient(135deg,var(--dorado),var(--ambar));
+  border:none;padding:16px 42px;
+  font-family:'Montserrat',sans-serif;font-size:1.02rem;font-weight:600;
+  letter-spacing:.4px;color:#241703;border-radius:50px;cursor:pointer;
+  box-shadow:0 0 30px rgba(255,190,50,.45);
+  transition:transform .3s,box-shadow .3s;
+}
+#welcome button:hover,#welcome button:active{
+  transform:scale(1.06);box-shadow:0 0 45px rgba(255,200,60,.8);
+}
+
+/* ---------- Dedicatoria ---------- */
+#dedicatoria{
+  position:absolute;left:0;right:0;bottom:0;
+  z-index:10;text-align:center;
+  padding:60px 22px calc(26px + env(safe-area-inset-bottom,0px));
+  opacity:0;transition:opacity 1.8s ease;
+  pointer-events:none;
+  background:linear-gradient(to top, rgba(4,4,10,.92) 0%, rgba(4,4,10,.78) 45%, rgba(4,4,10,0) 100%);
+}
+#dedicatoria h2{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1.4rem,5.2vw,2rem);font-weight:600;
+  color:#fff;text-shadow:0 0 16px rgba(255,210,70,.55);
+  margin-bottom:8px;
+}
+#contador{
+  font-size:.9rem;font-weight:600;letter-spacing:.3px;
+  color:var(--dorado);margin-bottom:12px;
+}
+#texto{
+  font-size:.95rem;font-weight:300;line-height:1.65;
+  color:#e8e6ef;max-width:560px;margin:0 auto;
+  min-height:5.2em;
+  transition:opacity .7s ease;
+}
+#siguiente{
+  margin-top:16px;pointer-events:auto;
+  background:transparent;border:1px solid rgba(255,213,74,.5);
+  color:var(--dorado);padding:9px 24px;border-radius:40px;
+  font-family:'Montserrat',sans-serif;font-size:.82rem;letter-spacing:.6px;
+  cursor:pointer;opacity:0;transition:opacity .6s,background .3s;
+}
+#siguiente:hover{background:rgba(255,213,74,.14)}
+
+/* ---------- Pista para tocar las flores ---------- */
+#pista{
+  position:absolute;top:calc(18px + env(safe-area-inset-top,0px));left:0;right:0;
+  z-index:12;text-align:center;
+  font-size:.76rem;font-weight:300;letter-spacing:1.1px;
+  color:rgba(255,213,74,.62);
+  opacity:0;transition:opacity 1.4s ease;
+  pointer-events:none;text-transform:uppercase;
+}
+
+/* ---------- Burbuja de recuerdo al tocar una flor ---------- */
+#recuerdo{
+  position:absolute;z-index:15;
+  max-width:260px;padding:14px 18px;
+  background:rgba(22,16,32,.94);
+  border:1px solid rgba(255,213,74,.4);
+  border-radius:16px;
+  box-shadow:0 10px 40px rgba(0,0,0,.6), 0 0 26px rgba(255,190,60,.18);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.06rem;font-style:italic;line-height:1.45;color:#ffe9b0;
+  opacity:0;transform:translateY(8px) scale(.96);
+  transition:opacity .45s ease, transform .45s ease;
+  pointer-events:none;text-align:center;
+}
+#recuerdo.visible{opacity:1;transform:translateY(0) scale(1)}
+
+/* ---------- Música ---------- */
+#musica{
+  position:absolute;z-index:25;
+  top:calc(16px + env(safe-area-inset-top,0px));right:16px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,213,74,.35);
+  color:var(--dorado);
+  width:42px;height:42px;border-radius:50%;
+  cursor:pointer;font-size:1rem;display:none;
+  align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);transition:background .3s;
+}
+#musica:hover{background:rgba(255,213,74,.18)}
+</style>
+</head>
+<body>
+
+<!-- ===================== BIENVENIDA ===================== -->
+<div id="welcome">
+  <div class="sello">💛</div>
+  <h1 id="welcomeTitulo">Para mi hermosa mujer</h1>
+  <p>Hoy es el Día de las Flores Amarillas y tengo algo preparado solo para ti.</p>
+  <button onclick="iniciar()">Toca aquí para abrirlo</button>
+</div>
+
+<button id="musica" onclick="alternarMusica()">🔇</button>
+
+<canvas id="lienzo"></canvas>
+
+<div id="pista">Toca las flores del árbol 🌼</div>
+<div id="recuerdo"></div>
+
+<!-- ===================== DEDICATORIA ===================== -->
+<div id="dedicatoria">
+  <h2 id="titulo">Feliz Día de las Flores Amarillas, mi amor 💛</h2>
+  <div id="contador"></div>
+  <p id="texto"></p>
+  <button id="siguiente" onclick="siguienteMensaje()">seguir leyendo →</button>
+</div>
+
+<audio id="audio" loop preload="auto">
+  <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=romantic-cute-piano-112133.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* =======================================================
+   CONFIG — EDITA SOLO ESTO
+   ======================================================= */
+const CONFIG = {
+
+  nombre: "Kiara",
+
+  // ⚠️ IMPORTANTE: pon aquí la fecha real en que empezaron,
+  // en formato AÑO-MES-DÍA. El contador se calcula solo,
+  // así que siempre mostrará los días exactos, hoy y siempre.
+  fechaInicio: "2026-02-15",
+
+  // Los mensajes se muestran uno tras otro.
+  // Puedes poner 2, 3 o los que quieras.
+  mensajes: [
+    "Aunque hoy estés en Ica, te siento más cerca que nunca. Este árbol florece igual que florece todo en mí cuando pienso en ti.",
+    "Cada flor amarilla que ves aquí es un día en que me alegraste sin siquiera proponértelo. Son muchas, y todavía faltan más.",
+    "Eres lo más bonito y lo más preciado que tengo. Gracias por elegirme cada día. Te amo muchísimo, Kiara. 💛"
+  ],
+
+  // Recuerdos que aparecen al tocar una flor del árbol.
+  // Cambia estos por cosas reales de ustedes: son los que
+  // más la van a emocionar.
+  recuerdos: [
+    "El día que te vi por primera vez y algo en mí supo.",
+    "Tu risa cuando algo te da mucha vergüenza.",
+    "Esa conversación que se nos hizo de madrugada.",
+    "Cómo dices mi nombre cuando estás contenta.",
+    "El primer viaje que hicimos juntos.",
+    "La forma en que me cuidas sin que te lo pida.",
+    "Cuando me abrazas y el mundo se calla un rato.",
+    "Todas las mañanas que me alegraste con un mensaje.",
+    "Los planes que todavía no hacemos pero ya soñamos.",
+    "Tú. Simplemente tú, cada día."
+  ],
+
+  densidadFlores: 620,   // sube o baja si quieres el corazón más o menos tupido
+  petalosFondo: 150
+};
+/* ============== FIN DE LA ZONA EDITABLE ================ */
+
+
+const audio = document.getElementById('audio');
+let sonando = false;
+
+document.getElementById('welcomeTitulo').textContent = "Para mi hermosa " + CONFIG.nombre;
+
+/* ---------------- Contador automático ---------------- */
+function calcularTiempo(){
+  const inicio = new Date(CONFIG.fechaInicio + "T00:00:00");
+  const hoy = new Date();
+  if (isNaN(inicio) || hoy < inicio) return "";
+
+  let años = hoy.getFullYear() - inicio.getFullYear();
+  let meses = hoy.getMonth() - inicio.getMonth();
+  let dias = hoy.getDate() - inicio.getDate();
+
+  if (dias < 0){
+    meses--;
+    const finMesAnterior = new Date(hoy.getFullYear(), hoy.getMonth(), 0).getDate();
+    dias += finMesAnterior;
+  }
+  if (meses < 0){ meses += 12; años--; }
+
+  const totalDias = Math.floor((hoy - inicio) / 86400000);
+
+  const partes = [];
+  if (años > 0)  partes.push(años + (años === 1 ? " año" : " años"));
+  if (meses > 0) partes.push(meses + (meses === 1 ? " mes" : " meses"));
+  if (dias > 0)  partes.push(dias + (dias === 1 ? " día" : " días"));
+
+  let frase;
+  if (partes.length === 0) frase = "Hoy empieza nuestra historia";
+  else if (partes.length === 1) frase = "Llevamos " + partes[0];
+  else frase = "Llevamos " + partes.slice(0,-1).join(", ") + " y " + partes[partes.length-1];
+
+  return frase + " juntos · " + totalDias.toLocaleString('es-PE') + " días";
+}
+
+/* ---------------- Mensajes secuenciales ---------------- */
+let indiceMensaje = 0;
+const elTexto = document.getElementById('texto');
+const elSiguiente = document.getElementById('siguiente');
+
+function mostrarMensaje(i){
+  elTexto.style.opacity = 0;
+  setTimeout(() => {
+    elTexto.textContent = CONFIG.mensajes[i];
+    elTexto.style.opacity = 1;
+  }, 450);
+
+  if (i >= CONFIG.mensajes.length - 1){
+    elSiguiente.style.opacity = 0;
+    setTimeout(() => elSiguiente.style.display = 'none', 600);
+  }
+}
+
+function siguienteMensaje(){
+  if (indiceMensaje < CONFIG.mensajes.length - 1){
+    indiceMensaje++;
+    mostrarMensaje(indiceMensaje);
+  }
+}
+
+/* ---------------- Música ---------------- */
+function alternarMusica(){
+  if (sonando){ audio.pause(); sonando = false; document.getElementById('musica').textContent = '🔇'; }
+  else { audio.play().then(()=>{ sonando = true; document.getElementById('musica').textContent = '🎵'; }).catch(()=>{}); }
+}
+
+/* ---------------- Arranque ---------------- */
+function iniciar(){
+  const w = document.getElementById('welcome');
+  w.style.opacity = '0';
+
+  audio.volume = 0.35;
+  audio.play().then(()=>{
+    sonando = true;
+    document.getElementById('musica').textContent = '🎵';
+  }).catch(()=>{ document.getElementById('musica').textContent = '🔇'; });
+
+  document.getElementById('musica').style.display = 'flex';
+
+  setTimeout(() => { w.style.display = 'none'; animarArbol(); }, 1300);
+}
+
+/* =======================================================
+   ANIMACIÓN: ÁRBOL CON COPA EN FORMA DE CORAZÓN
+   ======================================================= */
+function animarArbol(){
+  const lienzo = document.getElementById('lienzo');
+  const ctx = lienzo.getContext('2d');
+  let W, H, cx, cy, R;
+
+  function medir(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    lienzo.width = W * dpr; lienzo.height = H * dpr;
+    lienzo.style.width = W + 'px'; lienzo.style.height = H + 'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    // centro y radio del corazón
+    cx = W / 2;
+    cy = H * 0.38;
+    R  = Math.min(W * 0.42, H * 0.30);
+  }
+  medir();
+
+  // ¿El punto (x,y) está dentro del corazón?
+  function dentroCorazon(x, y){
+    const u = (x - cx) / R;
+    const v = (cy - y) / R;          // v positivo hacia arriba
+    const a = u*u + v*v - 1;
+    return (a*a*a - u*u*v*v*v) <= 0;
+  }
+
+  /* ---------- Ramas ---------- */
+  class Rama{
+    constructor(x, y, largo, angulo, grosor, nivel){
+      this.x = x; this.y = y;
+      this.largo = largo; this.angulo = angulo;
+      this.grosor = grosor; this.nivel = nivel;
+      this.avance = 0;
+      this.curva = (Math.random() - 0.5) * 0.26;   // curvatura suave, más orgánica
+      this.tono = 18 + Math.random() * 10;
+    }
+    dibujar(){
+      if (this.avance < 1) this.avance += 0.016;
+      const L = this.largo * Math.min(this.avance, 1);
+
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angulo);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(this.curva * L * 0.5, -L * 0.5, this.curva * L, -L);
+      ctx.strokeStyle = `hsl(${this.tono}, 34%, ${12 + this.nivel * 2.4}%)`;
+      ctx.lineWidth = this.grosor;
+      ctx.lineCap = 'round';
+      ctx.shadowColor = 'rgba(255,190,70,.20)';
+      ctx.shadowBlur = 6;
+      ctx.stroke();
+      ctx.restore();
+    }
+    fin(){
+      const L = this.largo * Math.min(this.avance, 1);
+      const lx = this.curva * L, ly = -L;
+      return {
+        x: this.x + lx * Math.cos(this.angulo) - ly * Math.sin(this.angulo),
+        y: this.y + lx * Math.sin(this.angulo) + ly * Math.cos(this.angulo)
+      };
+    }
+  }
+
+  /* ---------- Flores ---------- */
+  class Flor{
+    constructor(x, y, retraso, esRecuerdo, textoRecuerdo){
+      this.x = x; this.y = y;
+      this.max = Math.random() * 5 + 4.5;
+      this.tam = 0;
+      this.retraso = retraso;
+      this.t = 0;
+      this.giro = Math.random() * Math.PI;
+      this.esRecuerdo = esRecuerdo;
+      this.texto = textoRecuerdo || null;
+      this.pulso = Math.random() * Math.PI * 2;
+      const r = Math.random();
+      this.color = r > 0.72 ? '#fff3b0' : (r > 0.35 ? '#ffd54a' : '#ffc41e');
+    }
+    actualizar(dt){
+      this.t += dt;
+      if (this.t > this.retraso && this.tam < this.max) this.tam += this.max * 0.035;
+      this.pulso += 0.04;
+    }
+    dibujar(){
+      if (this.tam <= 0.2) return;
+      const s = this.tam;
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.giro);
+
+      // halo
+      ctx.globalAlpha = this.esRecuerdo ? 0.30 + Math.sin(this.pulso) * 0.14 : 0.16;
+      ctx.fillStyle = '#ffcf4d';
+      ctx.beginPath();
+      ctx.arc(0, 0, s * (this.esRecuerdo ? 2.5 : 1.7), 0, Math.PI * 2);
+      ctx.fill();
+
+      // pétalos
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = this.color;
+      for (let i = 0; i < 5; i++){
+        const a = (i * 2 * Math.PI) / 5;
+        ctx.beginPath();
+        ctx.ellipse(Math.cos(a) * s * 0.58, Math.sin(a) * s * 0.58, s * 0.50, s * 0.36, a, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // centro
+      ctx.fillStyle = this.esRecuerdo ? '#ff7a18' : '#e98a09';
+      ctx.beginPath();
+      ctx.arc(0, 0, s * 0.34, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  /* ---------- Pétalos de fondo (muy tenues) ---------- */
+  class Petalo{
+    constructor(){ this.reset(true); }
+    reset(inicial){
+      this.x = Math.random() * W;
+      this.y = inicial ? Math.random() * H : -20;
+      this.r = Math.random() * 4.5 + 2;
+      this.vy = Math.random() * 1.1 + 0.35;
+      this.vx = Math.random() * 0.9 - 0.45;
+      this.a  = Math.random() * Math.PI;
+      this.giro = Math.random() * 0.05 - 0.025;
+      this.alfa = Math.random() * 0.14 + 0.07;   // muy transparente: no opaca el texto
+      this.color = Math.random() > 0.5 ? '#ffe07a' : '#ffcf4d';
+    }
+    actualizar(){
+      this.y += this.vy;
+      this.x += this.vx + Math.sin(this.a) * 0.45;
+      this.a += this.giro;
+      if (this.y > H + 20) this.reset(false);
+    }
+    dibujar(){
+      // se desvanece aún más sobre la zona de la dedicatoria
+      const zona = H * 0.66;
+      let alfa = this.alfa;
+      if (this.y > zona) alfa = this.alfa * Math.max(1 - (this.y - zona) / (H - zona), 0.08);
+
+      ctx.save();
+      ctx.globalAlpha = alfa;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.ellipse(this.x, this.y, this.r, this.r * 0.72, this.a, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  const ramas = [], flores = [], petalos = [];
+  for (let i = 0; i < CONFIG.petalosFondo; i++) petalos.push(new Petalo());
+
+  /* ---------- Generar el tronco y las ramas ---------- */
+  function generarRama(x, y, largo, angulo, grosor, nivel){
+    const rama = new Rama(x, y, largo, angulo, grosor, nivel);
+    ramas.push(rama);
+    if (nivel >= 7) return;
+
+    setTimeout(() => {
+      const f = rama.fin();
+      // si la rama ya se salió mucho del corazón, deja de ramificar
+      if (nivel > 3 && !dentroCorazon(f.x, f.y) && Math.hypot(f.x - cx, f.y - cy) > R * 1.15) return;
+
+      const apertura = 0.38 + Math.random() * 0.20;
+      const merma = 0.76;
+      generarRama(f.x, f.y, largo * merma, angulo + apertura, grosor * 0.70, nivel + 1);
+      generarRama(f.x, f.y, largo * merma, angulo - apertura, grosor * 0.70, nivel + 1);
+      if (nivel <= 2 && Math.random() > 0.5){
+        generarRama(f.x, f.y, largo * merma * 0.9, angulo + (Math.random()-0.5)*0.2, grosor * 0.6, nivel + 1);
+      }
+    }, nivel * 420);
+  }
+
+  const baseX = cx, baseY = H - 26;
+  generarRama(baseX, baseY, H * 0.17, 0, 14, 1);
+
+  /* ---------- Sembrar el corazón de flores ---------- */
+  const recuerdosPendientes = [...CONFIG.recuerdos];
+  function sembrarCorazon(){
+    let puestas = 0, intentos = 0;
+    const objetivo = CONFIG.densidadFlores;
+
+    while (puestas < objetivo && intentos < objetivo * 40){
+      intentos++;
+      const u = (Math.random() * 2.6 - 1.3);
+      const v = (Math.random() * 2.6 - 1.3);
+      const a = u*u + v*v - 1;
+      if ((a*a*a - u*u*v*v*v) > 0) continue;          // fuera del corazón
+
+      const x = cx + u * R;
+      const y = cy - v * R;
+
+      // el retraso hace que florezca de abajo hacia arriba, como si subiera la savia
+      const distancia = Math.hypot(x - baseX, y - baseY);
+      const retraso = 2600 + distancia * 3.2 + Math.random() * 700;
+
+      flores.push(new Flor(x, y, retraso, false));
+      puestas++;
+    }
+
+    // borde del corazón más marcado, se ve más nítida la silueta
+    for (let t = 0; t < Math.PI * 2; t += 0.012){
+      const u = Math.pow(Math.sin(t), 3) * 1.02;
+      const v = (13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t)) / 16;
+      const x = cx + u * R + (Math.random()-0.5) * 9;
+      const y = cy - v * R + (Math.random()-0.5) * 9;
+      const distancia = Math.hypot(x - baseX, y - baseY);
+      flores.push(new Flor(x, y, 2600 + distancia * 3.2 + Math.random() * 700, false));
+    }
+
+    // flores especiales con recuerdo: repartidas y con brillo pulsante
+    const candidatas = flores.filter(f => Math.hypot(f.x - cx, f.y - cy) < R * 0.85);
+    for (let i = 0; i < recuerdosPendientes.length && candidatas.length; i++){
+      const idx = Math.floor((i + 0.5) * candidatas.length / recuerdosPendientes.length);
+      const f = candidatas[Math.min(idx, candidatas.length - 1)];
+      f.esRecuerdo = true;
+      f.texto = recuerdosPendientes[i];
+      f.max *= 1.5;
+    }
+  }
+  sembrarCorazon();
+
+  /* ---------- Tocar una flor para ver un recuerdo ---------- */
+  const elRecuerdo = document.getElementById('recuerdo');
+  let temporizadorRecuerdo = null;
+
+  function alTocar(px, py){
+    let elegida = null, mejor = 46;
+    for (const f of flores){
+      if (!f.esRecuerdo || f.tam < 1) continue;
+      const d = Math.hypot(f.x - px, f.y - py);
+      if (d < mejor){ mejor = d; elegida = f; }
+    }
+    if (!elegida) return;
+
+    elRecuerdo.textContent = elegida.texto;
+    elRecuerdo.classList.remove('visible');
+
+    // posicionar la burbuja sin que se salga de la pantalla
+    requestAnimationFrame(() => {
+      const ancho = Math.min(260, W - 40);
+      let left = elegida.x - ancho / 2;
+      left = Math.max(18, Math.min(left, W - ancho - 18));
+      let top = elegida.y + 26;
+      if (top > H * 0.55) top = elegida.y - 110;
+      elRecuerdo.style.width = ancho + 'px';
+      elRecuerdo.style.left = left + 'px';
+      elRecuerdo.style.top = Math.max(20, top) + 'px';
+      elRecuerdo.classList.add('visible');
+    });
+
+    clearTimeout(temporizadorRecuerdo);
+    temporizadorRecuerdo = setTimeout(() => elRecuerdo.classList.remove('visible'), 5200);
+  }
+
+  lienzo.addEventListener('click', e => alTocar(e.clientX, e.clientY));
+  lienzo.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    alTocar(t.clientX, t.clientY);
+  }, {passive:true});
+
+  /* ---------- Mostrar la dedicatoria cuando ya floreció ---------- */
+  setTimeout(() => {
+    document.getElementById('contador').textContent = calcularTiempo();
+    mostrarMensaje(0);
+    document.getElementById('dedicatoria').style.opacity = '1';
+    if (CONFIG.mensajes.length > 1) elSiguiente.style.opacity = '1';
+  }, 5200);
+
+  setTimeout(() => { document.getElementById('pista').style.opacity = '1'; }, 7600);
+  setTimeout(() => { document.getElementById('pista').style.opacity = '0'; }, 16000);
+
+  window.addEventListener('resize', medir);
+
+  /* ---------- Bucle ---------- */
+  let anterior = performance.now();
+  function animar(ahora){
+    const dt = ahora - anterior; anterior = ahora;
+    ctx.clearRect(0, 0, W, H);
+
+    // resplandor del suelo
+    const g = ctx.createRadialGradient(baseX, baseY, 0, baseX, baseY, R * 0.9);
+    g.addColorStop(0, 'rgba(255,175,60,.16)');
+    g.addColorStop(1, 'rgba(255,175,60,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, baseY - R, W, R + 40);
+
+    petalos.forEach(p => { p.actualizar(); p.dibujar(); });
+    ramas.forEach(r => r.dibujar());
+    flores.forEach(f => { f.actualizar(dt); f.dibujar(); });
+
+    requestAnimationFrame(animar);
+  }
+  requestAnimationFrame(animar);
+}
+</script>
+</body>
+</html>
